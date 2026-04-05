@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Biostatistics Checklist</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d1117;
+    --surface: #161b22;
+    --surface2: #1c2333;
+    --border: #30363d;
+    --border-soft: #21262d;
+    --text: #e6edf3;
+    --text-muted: #7d8590;
+    --text-dim: #484f58;
+    --blue: #2f81f7;
+    --blue-glow: rgba(47,129,247,0.15);
+    --blue-light: rgba(47,129,247,0.12);
+    --amber: #e3b341;
+    --amber-glow: rgba(227,179,65,0.15);
+    --red: #f85149;
+    --red-glow: rgba(248,81,73,0.15);
+    --purple: #a371f7;
+    --purple-glow: rgba(163,113,247,0.15);
+    --green: #3fb950;
+    --green-glow: rgba(63,185,80,0.15);
+    --radius: 8px;
+    --radius-sm: 5px;
+    --transition: 0.18s cubic-bezier(0.4,0,0.2,1);
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'DM Sans',sans-serif; background:var(--bg); color:var(--text); min-height:100vh; padding:0 0 80px; }
+
+  .sync-bar { background:var(--surface2); border-bottom:1px solid var(--border-soft); padding:6px 32px; }
+  .sync-bar-inner { max-width:860px; margin:0 auto; display:flex; align-items:center; justify-content:flex-end; gap:8px; }
+  .sync-dot { width:7px; height:7px; border-radius:50%; background:var(--text-dim); transition:background 0.3s; }
+  .sync-dot.syncing { background:var(--amber); animation:pulse 1s infinite; }
+  .sync-dot.synced  { background:var(--green); }
+  .sync-dot.error   { background:var(--red); }
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
+  .sync-label { font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); }
+
+  .header { background:linear-gradient(135deg,#0d1117 0%,#161b22 50%,#1c2333 100%); border-bottom:1px solid var(--border); padding:24px 32px 20px; position:sticky; top:0; z-index:100; }
+  .header-inner { max-width:860px; margin:0 auto; }
+  .header-top { display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+  .header h1 { font-family:'Syne',sans-serif; font-size:22px; font-weight:800; letter-spacing:-0.5px; }
+  .header h1 span { color:var(--blue); }
+  .progress-bar-wrap { margin-top:14px; display:flex; align-items:center; gap:12px; }
+  .progress-bar { flex:1; height:6px; background:var(--border); border-radius:99px; overflow:hidden; }
+  .progress-fill { height:100%; width:0%; background:linear-gradient(90deg,var(--blue),var(--purple)); border-radius:99px; transition:width 0.4s cubic-bezier(0.4,0,0.2,1); }
+  .progress-label { font-family:'DM Mono',monospace; font-size:12px; color:var(--text-muted); white-space:nowrap; }
+  .legend { display:flex; gap:10px; flex-wrap:wrap; margin-top:12px; }
+  .legend-item { display:flex; align-items:center; gap:5px; font-size:11px; color:var(--text-muted); font-family:'DM Mono',monospace; }
+  .legend-dot { width:8px; height:8px; border-radius:50%; }
+  .toolbar { display:flex; gap:8px; flex-wrap:wrap; }
+  .tool-btn { background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text-muted); font-family:'DM Mono',monospace; font-size:11px; padding:5px 10px; cursor:pointer; transition:all var(--transition); }
+  .tool-btn:hover { border-color:var(--blue); color:var(--text); }
+
+  .main { max-width:860px; margin:0 auto; padding:24px 32px 0; }
+
+  .loading-screen { display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:50vh; gap:16px; }
+  .spinner { width:32px; height:32px; border:3px solid var(--border); border-top-color:var(--blue); border-radius:50%; animation:spin 0.8s linear infinite; }
+  @keyframes spin { to { transform:rotate(360deg); } }
+  .loading-text { font-family:'DM Mono',monospace; font-size:13px; color:var(--text-muted); }
+
+  .week { margin-bottom:32px; }
+  .week-header { display:flex; align-items:center; gap:10px; margin-bottom:12px; }
+  .week-title { font-family:'Syne',sans-serif; font-size:14px; font-weight:700; letter-spacing:0.5px; text-transform:uppercase; }
+  .week-line { flex:1; height:1px; background:var(--border); }
+  .week-count { font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); }
+
+  .day-block { margin-bottom:12px; border:1px solid var(--border-soft); border-radius:var(--radius); overflow:hidden; background:var(--surface); }
+  .day-header { display:flex; align-items:center; justify-content:space-between; padding:10px 14px; background:var(--surface2); border-bottom:1px solid var(--border-soft); cursor:pointer; user-select:none; }
+  .day-header:hover { background:#1f2937; }
+  .day-name { font-family:'Syne',sans-serif; font-size:12px; font-weight:700; color:var(--text-muted); letter-spacing:0.3px; text-transform:uppercase; }
+  .day-actions { display:flex; gap:6px; align-items:center; }
+  .day-progress-text { font-family:'DM Mono',monospace; font-size:11px; color:var(--text-dim); }
+  .collapse-btn { background:none; border:none; cursor:pointer; color:var(--text-dim); font-size:14px; padding:2px 4px; line-height:1; transition:color var(--transition),transform var(--transition); }
+  .collapse-btn:hover { color:var(--text-muted); }
+  .day-block.collapsed .collapse-btn { transform:rotate(-90deg); }
+  .day-block.collapsed .items-list, .day-block.collapsed .add-item-row { display:none; }
+
+  .items-list { list-style:none; }
+  .item { display:flex; align-items:center; gap:10px; padding:9px 14px; border-bottom:1px solid var(--border-soft); transition:background var(--transition); position:relative; }
+  .item:last-child { border-bottom:none; }
+  .item:hover { background:rgba(255,255,255,0.02); }
+  .item.dragging { opacity:0.4; }
+  .item.drag-over { background:rgba(47,129,247,0.08); border-top:2px solid var(--blue); }
+  .item.done .item-name { text-decoration:line-through; color:var(--text-dim); }
+  .item.done .item-badge { opacity:0.4; }
+
+  .drag-handle { color:var(--text-dim); cursor:grab; font-size:13px; padding:0 2px; line-height:1; transition:color var(--transition); }
+  .drag-handle:hover { color:var(--text-muted); }
+  .drag-handle:active { cursor:grabbing; }
+
+  .item-checkbox { width:17px; height:17px; flex-shrink:0; border-radius:4px; border:2px solid var(--border); background:transparent; cursor:pointer; transition:all var(--transition); display:flex; align-items:center; justify-content:center; font-size:10px; color:transparent; }
+  .item-checkbox:hover { border-color:var(--blue); }
+  .item.done .item-checkbox { background:var(--green); border-color:var(--green); color:white; }
+
+  .item-badge { font-family:'DM Mono',monospace; font-size:10px; font-weight:500; padding:2px 7px; border-radius:4px; white-space:nowrap; flex-shrink:0; }
+  .badge-lecture { background:var(--blue-light); color:var(--blue); }
+  .badge-spss    { background:var(--amber-glow); color:var(--amber); }
+  .badge-sdl     { background:var(--red-glow);   color:var(--red); }
+  .badge-field   { background:var(--purple-glow); color:var(--purple); }
+  .badge-exam    { background:var(--green-glow);  color:var(--green); }
+
+  .item-name { flex:1; font-size:13.5px; color:var(--text); transition:color var(--transition); outline:none; min-width:0; }
+  .item-name[contenteditable="true"] { background:var(--surface2); border-radius:4px; padding:2px 6px; box-shadow:0 0 0 2px var(--blue); }
+
+  .item-del { background:none; border:none; cursor:pointer; color:transparent; font-size:16px; transition:color var(--transition); line-height:1; padding:2px; flex-shrink:0; }
+  .item:hover .item-del { color:var(--text-dim); }
+  .item-del:hover { color:var(--red) !important; }
+
+  .add-item-row { display:flex; gap:8px; align-items:center; padding:8px 14px; border-top:1px solid var(--border-soft); }
+  .add-type-select { background:var(--surface2); border:1px solid var(--border); color:var(--text-muted); border-radius:var(--radius-sm); font-family:'DM Mono',monospace; font-size:11px; padding:4px 6px; cursor:pointer; outline:none; }
+  .add-type-select:focus { border-color:var(--blue); }
+  .add-input { flex:1; background:var(--surface2); border:1px solid var(--border); border-radius:var(--radius-sm); color:var(--text); font-family:'DM Sans',sans-serif; font-size:13px; padding:5px 10px; outline:none; transition:border-color var(--transition); }
+  .add-input::placeholder { color:var(--text-dim); }
+  .add-input:focus { border-color:var(--blue); }
+  .add-btn { background:var(--blue); border:none; cursor:pointer; color:white; font-size:16px; width:28px; height:28px; border-radius:var(--radius-sm); display:flex; align-items:center; justify-content:center; transition:background var(--transition),transform var(--transition); flex-shrink:0; }
+  .add-btn:hover { background:#388bfd; transform:scale(1.05); }
+
+  .toast { position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(60px); background:var(--surface2); border:1px solid var(--green); color:var(--green); border-radius:var(--radius); padding:10px 20px; font-size:13px; font-family:'DM Mono',monospace; transition:transform 0.3s ease; z-index:999; pointer-events:none; box-shadow:0 0 20px var(--green-glow); }
+  .toast.show { transform:translateX(-50%) translateY(0); }
+  .toast.err { border-color:var(--red); color:var(--red); box-shadow:0 0 20px var(--red-glow); }
+
+  ::-webkit-scrollbar { width:6px; }
+  ::-webkit-scrollbar-track { background:var(--bg); }
+  ::-webkit-scrollbar-thumb { background:var(--border); border-radius:99px; }
+
+  @media (max-width:600px) {
+    .header { padding:16px; }
+    .main { padding:16px 16px 0; }
+    .sync-bar { padding:6px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="sync-bar">
+  <div class="sync-bar-inner">
+    <div class="sync-dot" id="syncDot"></div>
+    <span class="sync-label" id="syncLabel">connecting…</span>
+  </div>
+</div>
+
+<header class="header">
+  <div class="header-inner">
+    <div class="header-top">
+      <h1>Biostat <span>&amp;</span> Research Methods</h1>
+      <div class="toolbar">
+        <button class="tool-btn" onclick="expandAll()">↕ Expand All</button>
+        <button class="tool-btn" onclick="collapseAll()">↕ Collapse All</button>
+        <button class="tool-btn" onclick="clearDone()">✕ Clear Done</button>
+        <button class="tool-btn" onclick="exportData()">↓ Export</button>
+        <button class="tool-btn" onclick="triggerImport()">↑ Import</button>
+        <input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+      </div>
+    </div>
+    <div class="progress-bar-wrap">
+      <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+      <span class="progress-label" id="progressLabel">0 / 0</span>
+    </div>
+    <div class="legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--blue)"></div>Lecture</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--amber)"></div>SPSS</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>SDL</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--purple)"></div>Field / Seminar</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--green)"></div>Exam</div>
+    </div>
+  </div>
+</header>
+
+<main class="main" id="app">
+  <div class="loading-screen">
+    <div class="spinner"></div>
+    <div class="loading-text">Loading from cloud…</div>
+  </div>
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://iuzcsbytkbslhurlrfnq.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_ByID2JKtfU2Qj4s6XzkKzg_dicltyi0';
+const ROW_ID = 'yousef_main';
+
+const DEFAULT_DATA = [
+  { week:"Week 4 – Biostatistics", color:"blue", days:[
+    { day:"Sunday · 29 March 2026", items:[
+      {type:"lecture",code:"L32",    name:"Introduction to Biostatistics",done:false},
+      {type:"lecture",code:"L33/34", name:"Descriptive Statistics",done:false},
+      {type:"spss",   code:"SPSS P1",name:"Introduction to SPSS",done:false},
+      {type:"spss",   code:"SPSS P2",name:"Data Entry, Labeling and Transformations",done:false},
+    ]},
+    { day:"Monday · 30 March 2026", items:[
+      {type:"lecture",code:"L35",    name:"Data Summary and Presentation",done:false},
+      {type:"lecture",code:"L36",    name:"Sampling Techniques",done:false},
+      {type:"lecture",code:"L37",    name:"Normal Distribution Model & Z Score",done:false},
+      {type:"spss",   code:"SPSS P3",name:"Data Presentation and Descriptive Analysis",done:false},
+    ]},
+    { day:"Tuesday · 31 March 2026", items:[
+      {type:"lecture",code:"L38",name:"Introduction to Statistical Inference",done:false},
+      {type:"lecture",code:"L39",name:"Confidence Intervals and Confidence Limits",done:false},
+      {type:"lecture",code:"L40",name:"Introduction to Hypothesis Testing",done:false},
+      {type:"lecture",code:"L41",name:"Statistical Tests (One-Sample t-test & Independent t-test)",done:false},
+    ]},
+    { day:"Wednesday · 1 April 2026", items:[
+      {type:"lecture",code:"L42",    name:"Statistical Tests (Paired t-test & One-Way ANOVA)",done:false},
+      {type:"lecture",code:"L43",    name:"Measures of Relationship (Correlation, Chi-Square, Linear Regression)",done:false},
+      {type:"spss",   code:"SPSS P4",name:"Testing of Hypothesis and Statistical Tests",done:false},
+      {type:"spss",   code:"SPSS P5",name:"Correlation and Regression Analysis",done:false},
+    ]},
+    { day:"Thursday · 2 April 2026", items:[
+      {type:"sdl",  code:"SDL-9",   name:"Problem Solving (5): Analysis & Interpretation of Health Data",done:false},
+      {type:"spss", code:"SPSS P6", name:"Summary and Revision",done:false},
+      {type:"field",code:"Visit",   name:"Field Visit Orientation",done:false},
+    ]},
+  ]},
+  { week:"Week 5 – Seminars & Field Visits", color:"purple", days:[
+    { day:"Sunday · 5 April 2026 — Seminar Presentations", items:[
+      {type:"field",code:"Grp A",name:"Group A Presentation",done:false},
+      {type:"field",code:"Grp B",name:"Group B Presentation",done:false},
+      {type:"field",code:"Grp C",name:"Group C Presentation",done:false},
+      {type:"field",code:"Grp D",name:"Group D Presentation",done:false},
+      {type:"field",code:"Grp E",name:"Group E Presentation",done:false},
+      {type:"field",code:"Grp F",name:"Group F Presentation",done:false},
+      {type:"field",code:"Grp G",name:"Group G Presentation",done:false},
+      {type:"field",code:"Grp H",name:"Group H Presentation",done:false},
+    ]},
+    { day:"Monday · 6 April 2026", items:[
+      {type:"field",code:"Visit",name:"Field Visit – CEES / KAUH",done:false},
+    ]},
+    { day:"Tuesday · 7 April 2026", items:[
+      {type:"field",code:"Visit",name:"Field Visit – Albaik Factory",done:false},
+    ]},
+    { day:"Wednesday · 8 April 2026", items:[
+      {type:"sdl",    code:"SDL-5", name:"Reading Research Articles",done:false},
+      {type:"lecture",code:"L44",   name:"Critical Appraisal of Methods",done:false},
+      {type:"sdl",    code:"SDL-10",name:"Critical Appraisal of Methods (SDL)",done:false},
+    ]},
+    { day:"Thursday · 9 April 2026", items:[
+      {type:"lecture",code:"L45",   name:"Critical Appraisal of Results – 1",done:false},
+      {type:"lecture",code:"L46",   name:"Critical Appraisal of Results – 2",done:false},
+      {type:"lecture",code:"L47",   name:"Internal Validity of the Article",done:false},
+      {type:"sdl",    code:"SDL-11",name:"Critical Appraisal of Results (SDL)",done:false},
+    ]},
+  ]},
+  { week:"Week 6 – Critical Appraisal & Exams", color:"green", days:[
+    { day:"Sunday · 12 April 2026", items:[
+      {type:"lecture",code:"L48",   name:"External Validity of the Article",done:false},
+      {type:"sdl",    code:"SDL-12",name:"Critical Appraisal of the Article",done:false},
+      {type:"sdl",    code:"SDL-13",name:"Critical Appraisal of the Article",done:false},
+    ]},
+    { day:"Monday · 13 April 2026", items:[
+      {type:"field",code:"Assess", name:"Research Assessment",done:false},
+      {type:"sdl",  code:"SDL-14", name:"Research Question and Gap Identification",done:false},
+      {type:"sdl",  code:"SDL-15", name:"Proposal Preparation and Ethics Application",done:false},
+    ]},
+    { day:"Tuesday · 14 April 2026", items:[
+      {type:"field",code:"Prep",name:"Exam Preparation",done:false},
+    ]},
+    { day:"Wednesday · 15 April 2026 🎯", items:[
+      {type:"exam",code:"EXAM",name:"Final MCQ Exam",done:false},
+    ]},
+    { day:"Thursday · 16 April 2026 💻", items:[
+      {type:"exam",code:"EXAM",name:"SPSS Practical Exam",done:false},
+    ]},
+  ]},
+];
+
+let state = [];
+let dragSrc = null;
+let saveTimer = null;
+
+function uid() { return Math.random().toString(36).slice(2,9); }
+
+function ensureIds() {
+  state.forEach(w => w.days.forEach(d => d.items.forEach(i => {
+    if (!i.id) i.id = uid();
+    if (i.done === undefined) i.done = false;
+  })));
+}
+
+async function dbFetch(path, opts = {}) {
+  const headers = {
+    'apikey': SUPABASE_KEY,
+    'Authorization': 'Bearer ' + SUPABASE_KEY,
+    'Content-Type': 'application/json',
+  };
+  if (opts.prefer) headers['Prefer'] = opts.prefer;
+  const res = await fetch(SUPABASE_URL + '/rest/v1/' + path, {
+    method: opts.method || 'GET',
+    headers,
+    body: opts.body || undefined,
+  });
+  if (!res.ok) throw new Error(await res.text());
+  const text = await res.text();
+  return text ? JSON.parse(text) : null;
+}
+
+async function loadFromCloud() {
+  setSyncState('syncing', 'loading…');
+  try {
+    const rows = await dbFetch(`checklist?id=eq.${ROW_ID}&select=data`);
+    if (rows && rows.length > 0 && rows[0].data && rows[0].data.length > 0) {
+      state = rows[0].data;
+    } else {
+      state = JSON.parse(JSON.stringify(DEFAULT_DATA));
+      ensureIds();
+      await saveToCloud(true);
+    }
+    ensureIds();
+    setSyncState('synced', 'synced');
+  } catch (e) {
+    console.error(e);
+    try {
+      const saved = localStorage.getItem('biostats_v3');
+      state = saved ? JSON.parse(saved) : JSON.parse(JSON.stringify(DEFAULT_DATA));
+    } catch { state = JSON.parse(JSON.stringify(DEFAULT_DATA)); }
+    ensureIds();
+    setSyncState('error', 'offline – local only');
+    showToast('Cloud unreachable, using local storage', true);
+  }
+}
+
+async function saveToCloud(immediate = false) {
+  setSyncState('syncing', 'saving…');
+  try {
+    await dbFetch(`checklist?id=eq.${ROW_ID}`, {
+      method: 'PATCH',
+      prefer: 'return=minimal',
+      body: JSON.stringify({ data: state, updated_at: new Date().toISOString() }),
+    });
+    localStorage.setItem('biostats_v3', JSON.stringify(state));
+    setSyncState('synced', 'saved ✓');
+    setTimeout(() => setSyncState('synced', 'synced'), 2000);
+  } catch (e) {
+    console.error(e);
+    localStorage.setItem('biostats_v3', JSON.stringify(state));
+    setSyncState('error', 'cloud error – saved locally');
+  }
+}
+
+function scheduleSave() {
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(() => saveToCloud(), 900);
+}
+
+function setSyncState(s, label) {
+  document.getElementById('syncDot').className = 'sync-dot ' + s;
+  document.getElementById('syncLabel').textContent = label;
+}
+
+// ── RENDER ────────────────────────────────────────────────────
+const WEEK_COLORS = { blue:'var(--blue)', purple:'var(--purple)', green:'var(--green)' };
+
+function render() {
+  const app = document.getElementById('app');
+  app.innerHTML = '';
+  state.forEach((week, wi) => {
+    const wc = WEEK_COLORS[week.color] || 'var(--blue)';
+    const totalItems = week.days.reduce((s,d)=>s+d.items.length, 0);
+    const doneItems  = week.days.reduce((s,d)=>s+d.items.filter(i=>i.done).length, 0);
+    const weekEl = document.createElement('div');
+    weekEl.className = 'week';
+    weekEl.innerHTML = `<div class="week-header">
+      <span class="week-title" style="color:${wc}">${week.week}</span>
+      <div class="week-line" style="background:linear-gradient(90deg,${wc}33,transparent)"></div>
+      <span class="week-count">${doneItems}/${totalItems}</span>
+    </div>`;
+    week.days.forEach((day, di) => {
+      const doneCnt = day.items.filter(i=>i.done).length;
+      const block = document.createElement('div');
+      block.className = 'day-block';
+      block.innerHTML = `
+        <div class="day-header" onclick="toggleCollapse(this.closest('.day-block'))">
+          <span class="day-name">${day.day}</span>
+          <div class="day-actions">
+            <span class="day-progress-text">${doneCnt}/${day.items.length}</span>
+            <button class="collapse-btn" onclick="event.stopPropagation();toggleCollapse(this.closest('.day-block'))">▾</button>
+          </div>
+        </div>
+        <ul class="items-list" data-wi="${wi}" data-di="${di}"></ul>
+        <div class="add-item-row">
+          <select class="add-type-select" id="type_${wi}_${di}">
+            <option value="lecture">Lecture</option>
+            <option value="spss">SPSS</option>
+            <option value="sdl">SDL</option>
+            <option value="field">Field</option>
+            <option value="exam">Exam</option>
+          </select>
+          <input class="add-input" id="add_${wi}_${di}" placeholder="Add item…"
+            onkeydown="if(event.key==='Enter')addItem(${wi},${di})">
+          <button class="add-btn" onclick="addItem(${wi},${di})">+</button>
+        </div>`;
+      const ul = block.querySelector('.items-list');
+      day.items.forEach((item, ii) => ul.appendChild(makeItemEl(wi, di, ii, item)));
+      setupDragDrop(ul);
+      weekEl.appendChild(block);
+    });
+    app.appendChild(weekEl);
+  });
+  updateProgress();
+}
+
+function makeItemEl(wi, di, ii, item) {
+  const li = document.createElement('li');
+  li.className = 'item' + (item.done ? ' done' : '');
+  li.dataset.wi = wi; li.dataset.di = di; li.dataset.ii = ii;
+  li.draggable = true;
+  li.innerHTML = `
+    <span class="drag-handle">⠿</span>
+    <div class="item-checkbox" onclick="toggleDone(${wi},${di},${ii})">✓</div>
+    <span class="item-badge badge-${item.type}">${escHtml(item.code)}</span>
+    <span class="item-name" contenteditable="false"
+      ondblclick="startEdit(this,${wi},${di},${ii})"
+      onblur="endEdit(this,${wi},${di},${ii})"
+      onkeydown="if(event.key==='Enter'){event.preventDefault();this.blur()}"
+      >${escHtml(item.name)}</span>
+    <button class="item-del" onclick="deleteItem(${wi},${di},${ii})">×</button>`;
+  li.addEventListener('dragstart', e => {
+    dragSrc = { wi:+li.dataset.wi, di:+li.dataset.di, ii:+li.dataset.ii };
+    li.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+  });
+  li.addEventListener('dragend', () => {
+    li.classList.remove('dragging');
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+  });
+  return li;
+}
+
+function setupDragDrop(ul) {
+  ul.addEventListener('dragover', e => {
+    e.preventDefault();
+    const t = e.target.closest('.item');
+    if (!t || !dragSrc) return;
+    document.querySelectorAll('.drag-over').forEach(el => el.classList.remove('drag-over'));
+    t.classList.add('drag-over');
+  });
+  ul.addEventListener('drop', e => {
+    e.preventDefault();
+    const t = e.target.closest('.item');
+    if (!t || !dragSrc) return;
+    t.classList.remove('drag-over');
+    const dWi=+t.dataset.wi, dDi=+t.dataset.di, dIi=+t.dataset.ii;
+    if (dragSrc.wi===dWi && dragSrc.di===dDi && dragSrc.ii===dIi) return;
+    const [moved] = state[dragSrc.wi].days[dragSrc.di].items.splice(dragSrc.ii, 1);
+    state[dWi].days[dDi].items.splice(dIi, 0, moved);
+    scheduleSave(); render();
+  });
+}
+
+function toggleDone(wi, di, ii) {
+  const item = state[wi].days[di].items[ii];
+  item.done = !item.done;
+  const li = document.querySelector(`.item[data-wi="${wi}"][data-di="${di}"][data-ii="${ii}"]`);
+  if (li) li.classList.toggle('done', item.done);
+  const ul = document.querySelector(`ul[data-wi="${wi}"][data-di="${di}"]`);
+  if (ul) {
+    const d = state[wi].days[di];
+    ul.closest('.day-block').querySelector('.day-progress-text').textContent =
+      `${d.items.filter(i=>i.done).length}/${d.items.length}`;
+  }
+  if (item.done) showToast('✓ Done!');
+  updateProgress();
+  scheduleSave();
+}
+
+function deleteItem(wi, di, ii) {
+  state[wi].days[di].items.splice(ii, 1);
+  scheduleSave(); render();
+}
+
+function addItem(wi, di) {
+  const input = document.getElementById(`add_${wi}_${di}`);
+  const typeEl = document.getElementById(`type_${wi}_${di}`);
+  const name = input.value.trim();
+  if (!name) { input.focus(); return; }
+  const codes = {lecture:'L??',spss:'SPSS',sdl:'SDL',field:'Field',exam:'EXAM'};
+  state[wi].days[di].items.push({id:uid(), type:typeEl.value, code:codes[typeEl.value], name, done:false});
+  input.value = '';
+  scheduleSave(); render();
+}
+
+function startEdit(el, wi, di, ii) {
+  el.contentEditable = 'true'; el.focus();
+  const r = document.createRange(); r.selectNodeContents(el); r.collapse(false);
+  window.getSelection().removeAllRanges(); window.getSelection().addRange(r);
+}
+
+function endEdit(el, wi, di, ii) {
+  el.contentEditable = 'false';
+  const n = el.textContent.trim();
+  if (n) { state[wi].days[di].items[ii].name = n; scheduleSave(); }
+  else el.textContent = state[wi].days[di].items[ii].name;
+}
+
+function toggleCollapse(block) { block.classList.toggle('collapsed'); }
+function expandAll()   { document.querySelectorAll('.day-block').forEach(b=>b.classList.remove('collapsed')); }
+function collapseAll() { document.querySelectorAll('.day-block').forEach(b=>b.classList.add('collapsed')); }
+
+function clearDone() {
+  state.forEach(w=>w.days.forEach(d=>{ d.items=d.items.filter(i=>!i.done); }));
+  scheduleSave(); render(); showToast('Cleared all done items');
+}
+
+function updateProgress() {
+  let total=0, done=0;
+  state.forEach(w=>w.days.forEach(d=>d.items.forEach(i=>{total++;if(i.done)done++;})));
+  document.getElementById('progressFill').style.width = total ? `${done/total*100}%` : '0%';
+  document.getElementById('progressLabel').textContent = `${done} / ${total}`;
+}
+
+function exportData() {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));
+  a.download = 'biostats_checklist.json'; a.click(); showToast('Exported!');
+}
+function triggerImport() { document.getElementById('importFile').click(); }
+function importData(e) {
+  const file = e.target.files[0]; if (!file) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try { state=JSON.parse(ev.target.result); ensureIds(); scheduleSave(); render(); showToast('Imported!'); }
+    catch { showToast('Invalid file', true); }
+  };
+  r.readAsText(file); e.target.value='';
+}
+
+function showToast(msg, isErr=false) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast show' + (isErr?' err':'');
+  clearTimeout(t._tid);
+  t._tid = setTimeout(()=>t.classList.remove('show'), 2400);
+}
+
+function escHtml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+loadFromCloud().then(() => render());
+</script>
+</body>
+</html>
