@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Biostatistics Checklist</title>
+<title>Study Checklist</title>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -33,6 +33,42 @@ body{
   color:var(--text);min-height:100vh;padding:0 0 80px;
 }
 
+/* ── AUTH SCREEN ── */
+.auth-screen{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:24px;
+}
+.auth-box{
+  background:var(--card);border:1px solid rgba(180,155,110,.18);
+  border-radius:12px;padding:36px 32px;width:100%;max-width:360px;
+  box-shadow:0 8px 40px rgba(100,80,50,.14);
+}
+.auth-logo{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;
+  letter-spacing:-.5px;margin-bottom:6px;color:var(--text);}
+.auth-logo span{color:var(--amber);}
+.auth-sub{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);margin-bottom:28px;}
+.auth-tabs{display:flex;gap:0;margin-bottom:24px;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;}
+.auth-tab{flex:1;padding:7px;font-family:'DM Mono',monospace;font-size:11px;
+  background:transparent;border:none;cursor:pointer;color:var(--text-dim);transition:all var(--transition);}
+.auth-tab.active{background:var(--amber);color:#1c1a16;font-weight:500;}
+.auth-field{margin-bottom:14px;}
+.auth-field label{display:block;font-family:'DM Mono',monospace;font-size:10px;
+  color:var(--text-dim);margin-bottom:5px;letter-spacing:.3px;text-transform:uppercase;}
+.auth-input{width:100%;background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:13px;padding:8px 10px;outline:none;transition:border-color var(--transition);}
+.auth-input:focus{border-color:var(--blue);}
+.auth-btn{width:100%;background:linear-gradient(135deg,#8fa8c8,#c8a96e);
+  border:none;color:#1c1a16;font-family:'Syne',sans-serif;font-size:13px;
+  font-weight:700;padding:10px;border-radius:var(--radius-sm);cursor:pointer;
+  transition:opacity var(--transition);margin-top:4px;letter-spacing:.3px;}
+.auth-btn:hover{opacity:.88;}
+.auth-btn:disabled{opacity:.5;cursor:not-allowed;}
+.auth-err{font-family:'DM Mono',monospace;font-size:11px;color:var(--red);
+  margin-top:10px;text-align:center;min-height:16px;}
+.auth-ok{font-family:'DM Mono',monospace;font-size:11px;color:var(--green);
+  margin-top:10px;text-align:center;min-height:16px;}
+
 /* SYNC */
 .sync-bar{background:rgba(235,229,218,.95);backdrop-filter:blur(12px);border-bottom:1px solid rgba(140,115,75,.18);padding:5px 32px;}
 .sync-bar-inner{max-width:980px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:8px;}
@@ -43,6 +79,13 @@ body{
 .sync-dot.error{background:var(--red);}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
 .sync-label{font-family:'DM Mono',monospace;font-size:11px;color:var(--text-dim);}
+.user-badge{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);
+  background:var(--surface2);border:1px solid var(--border);border-radius:20px;
+  padding:2px 8px;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.logout-btn{background:none;border:1px solid rgba(140,115,75,.22);border-radius:20px;
+  cursor:pointer;padding:2px 8px;font-size:10px;color:var(--text-dim);
+  font-family:'DM Mono',monospace;transition:all var(--transition);}
+.logout-btn:hover{border-color:var(--red);color:var(--red);}
 
 /* TIMER */
 .timer-wrap{display:flex;align-items:center;gap:8px;}
@@ -57,8 +100,9 @@ body{
 .header{background:rgba(238,232,220,.96);backdrop-filter:blur(16px);border-bottom:1px solid rgba(140,115,75,.18);padding:18px 32px 14px;position:sticky;top:0;z-index:100;}
 .header-inner{max-width:980px;margin:0 auto;}
 .header-top{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;}
-.header h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-.5px;}
+.header h1{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;letter-spacing:-.5px;cursor:pointer;}
 .header h1 span{color:#c8a96e;}
+.header h1:hover span{text-decoration:underline;}
 .progress-bar-wrap{margin-top:10px;display:flex;align-items:center;gap:10px;}
 .progress-bar{flex:1;height:5px;background:rgba(140,115,75,.15);border-radius:99px;overflow:hidden;}
 .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,#8fa8c8,#c8a96e,#7aab88);border-radius:99px;transition:width .4s cubic-bezier(.4,0,.2,1);}
@@ -69,6 +113,21 @@ body{
 .toolbar{display:flex;gap:5px;flex-wrap:wrap;}
 .tool-btn{background:rgba(140,115,75,.08);border:1px solid rgba(140,115,75,.22);border-radius:var(--radius-sm);color:var(--text-muted);font-family:'DM Mono',monospace;font-size:10px;padding:4px 8px;cursor:pointer;transition:all var(--transition);}
 .tool-btn:hover{border-color:var(--amber);color:var(--text);background:rgba(200,169,110,.1);}
+.tool-btn.accent{background:rgba(200,169,110,.12);border-color:rgba(200,169,110,.4);color:var(--amber);}
+.tool-btn.accent:hover{background:rgba(200,169,110,.22);}
+
+/* MODULE TITLE EDIT */
+.module-title-edit{
+  display:none;align-items:center;gap:8px;margin-top:6px;
+}
+.module-title-edit.visible{display:flex;}
+.module-title-input{
+  background:var(--card2);border:1px solid var(--blue);border-radius:var(--radius-sm);
+  color:var(--text);font-family:'Syne',sans-serif;font-size:16px;font-weight:700;
+  padding:4px 8px;outline:none;flex:1;
+}
+.module-title-save{background:var(--green);border:none;color:white;border-radius:var(--radius-sm);
+  padding:4px 10px;font-family:'DM Mono',monospace;font-size:11px;cursor:pointer;}
 
 /* MAIN LAYOUT */
 .main{max-width:980px;margin:0 auto;padding:18px 32px 0;display:grid;grid-template-columns:1fr 290px;gap:18px;align-items:start;}
@@ -98,21 +157,61 @@ body{
 /* WEEK */
 .week{margin-bottom:24px;}
 .week-header{display:flex;align-items:center;gap:10px;margin-bottom:10px;}
-.week-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
+.week-title{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;letter-spacing:.5px;text-transform:uppercase;cursor:pointer;}
+.week-title:hover{opacity:.75;}
 .week-line{flex:1;height:1px;background:var(--border);}
 .week-count{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);}
+.week-actions{display:flex;gap:4px;align-items:center;}
+.week-action-btn{background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:11px;
+  padding:2px 5px;border-radius:3px;transition:all var(--transition);font-family:'DM Mono',monospace;}
+.week-action-btn:hover{background:rgba(140,115,75,.1);color:var(--text);}
+.week-action-btn.del:hover{color:var(--red);}
+
+/* ADD WEEK/DAY */
+.add-week-row{display:flex;gap:8px;align-items:center;margin-bottom:24px;
+  padding:10px 12px;border:1px dashed rgba(200,169,110,.3);border-radius:var(--radius);
+  background:rgba(200,169,110,.04);}
+.add-week-input{flex:1;background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:12px;padding:5px 8px;outline:none;transition:border-color var(--transition);}
+.add-week-input:focus{border-color:var(--blue);}
+.add-week-select{background:var(--card2);border:1px solid var(--border);color:var(--text-muted);
+  border-radius:var(--radius-sm);font-family:'DM Mono',monospace;font-size:10px;
+  padding:5px 4px;cursor:pointer;outline:none;}
+.add-week-btn{background:linear-gradient(135deg,#8fa8c8,#c8a96e);border:none;cursor:pointer;
+  color:#1c1a16;font-size:13px;width:26px;height:26px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+
+/* ADD DAY */
+.add-day-row{display:flex;gap:6px;align-items:center;margin-top:6px;
+  padding:7px 10px;border:1px dashed rgba(200,169,110,.2);border-radius:var(--radius-sm);
+  background:rgba(200,169,110,.03);}
+.add-day-input{flex:1;background:var(--card2);border:1px solid var(--border);
+  border-radius:var(--radius-sm);color:var(--text);font-family:'DM Sans',sans-serif;
+  font-size:11px;padding:4px 7px;outline:none;transition:border-color var(--transition);}
+.add-day-input:focus{border-color:var(--blue);}
+.add-day-btn{background:rgba(200,169,110,.2);border:none;cursor:pointer;
+  color:var(--amber);font-size:13px;width:22px;height:22px;border-radius:var(--radius-sm);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  font-family:'DM Mono',monospace;font-weight:700;}
 
 /* DAY BLOCK */
 .day-block{margin-bottom:10px;border:1px solid rgba(180,155,110,.14);border-radius:var(--radius);overflow:hidden;background:var(--card);box-shadow:0 2px 12px rgba(100,80,50,.12);}
 .day-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;background:var(--card2);border-bottom:1px solid rgba(180,155,110,.12);cursor:pointer;user-select:none;}
 .day-header:hover{background:rgba(140,115,75,.1);}
-.day-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.3px;text-transform:uppercase;}
+.day-name{font-family:'Syne',sans-serif;font-size:11px;font-weight:700;color:var(--text-muted);letter-spacing:.3px;text-transform:uppercase;cursor:pointer;}
+.day-name[contenteditable="true"]{background:var(--surface2);border-radius:3px;padding:1px 5px;
+  box-shadow:0 0 0 2px var(--blue);outline:none;text-transform:none;}
 .day-actions{display:flex;gap:5px;align-items:center;}
 .day-progress-text{font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);}
 .collapse-btn{background:none;border:none;cursor:pointer;color:var(--text-dim);font-size:12px;padding:2px 3px;line-height:1;transition:color var(--transition),transform var(--transition);}
 .collapse-btn:hover{color:var(--text-muted);}
 .day-block.collapsed .collapse-btn{transform:rotate(-90deg);}
 .day-block.collapsed .items-list,.day-block.collapsed .add-item-row{display:none;}
+.day-del-btn{background:none;border:none;cursor:pointer;color:transparent;font-size:13px;
+  transition:color var(--transition);line-height:1;padding:1px 2px;}
+.day-header:hover .day-del-btn{color:var(--text-dim);}
+.day-del-btn:hover{color:var(--red)!important;}
 
 /* ITEMS */
 .items-list{list-style:none;}
@@ -145,6 +244,7 @@ body{
 .badge-exam{background:rgba(122,171,136,.14);color:#7aab88;border:1px solid rgba(122,171,136,.25);}
 .badge-urgent{background:rgba(192,120,64,.16);color:#c07840;border:1px solid rgba(192,120,64,.28);}
 .badge-canwait{background:rgba(122,171,168,.14);color:#7aaba8;border:1px solid rgba(122,171,168,.25);}
+.badge-task{background:rgba(154,138,176,.14);color:#9a8ab0;border:1px solid rgba(154,138,176,.25);}
 
 /* DIFF BADGE */
 .diff-badge{font-family:'DM Mono',monospace;font-size:9px;padding:1px 5px;border-radius:3px;cursor:pointer;flex-shrink:0;border:1px solid transparent;transition:all var(--transition);}
@@ -175,6 +275,12 @@ body{
 .add-input:focus{border-color:var(--blue);}
 .add-btn{background:linear-gradient(135deg,#8fa8c8,#c8a96e);border:none;cursor:pointer;color:#1c1a16;font-size:14px;width:24px;height:24px;border-radius:var(--radius-sm);display:flex;align-items:center;justify-content:center;transition:opacity var(--transition);flex-shrink:0;}
 .add-btn:hover{opacity:.82;}
+
+/* EMPTY STATE */
+.empty-state{padding:40px 20px;text-align:center;color:var(--text-dim);
+  font-family:'DM Mono',monospace;font-size:12px;line-height:2;}
+.empty-state strong{display:block;font-family:'Syne',sans-serif;font-size:16px;
+  color:var(--text-muted);margin-bottom:8px;}
 
 /* ── SIDEBAR WIDGETS ── */
 .widget{background:var(--card);border:1px solid rgba(180,155,110,.14);border-radius:var(--radius);overflow:hidden;box-shadow:0 2px 16px rgba(100,80,50,.1);}
@@ -269,6 +375,8 @@ body.dark {
 body.dark { background:#1a1510; }
 body.dark .header { background:rgba(26,21,16,.95) !important; }
 body.dark .sync-bar { background:rgba(26,21,16,.95) !important; }
+body.dark .auth-box { background:var(--card); border-color:rgba(160,130,85,.18); }
+body.dark .auth-input { background:var(--card2); border-color:rgba(160,130,85,.18); color:var(--text); }
 body.dark .day-block { background:var(--card); border-color:rgba(160,130,85,.14); }
 body.dark .day-header { background:var(--card2); border-color:rgba(160,130,85,.12); }
 body.dark .day-header:hover { background:rgba(160,130,85,.1); }
@@ -277,9 +385,13 @@ body.dark .widget { background:var(--card); border-color:rgba(160,130,85,.14); }
 body.dark .widget-header { background:var(--card2); border-color:rgba(160,130,85,.12); }
 body.dark .add-item-row { background:rgba(160,130,85,.03); border-color:rgba(160,130,85,.1); }
 body.dark .today-add-row { background:rgba(160,130,85,.03); border-color:rgba(160,130,85,.1); }
-body.dark .add-input, body.dark .today-add-input, body.dark .cd-input, body.dark .add-type-select { background:var(--card2); border-color:rgba(160,130,85,.18); color:var(--text); }
+body.dark .add-input, body.dark .today-add-input, body.dark .cd-input, body.dark .add-type-select,
+body.dark .add-week-input, body.dark .add-week-select, body.dark .add-day-input,
+body.dark .module-title-input { background:var(--card2); border-color:rgba(160,130,85,.18); color:var(--text); }
 body.dark .move-menu { background:var(--card2); border-color:rgba(160,130,85,.2); }
 body.dark .cd-editor { background:rgba(160,130,85,.03); border-color:rgba(160,130,85,.1); }
+body.dark .add-week-row { border-color:rgba(200,169,110,.2); background:rgba(200,169,110,.03); }
+body.dark .add-day-row { border-color:rgba(200,169,110,.15); background:rgba(200,169,110,.02); }
 
 /* DARK MODE TOGGLE */
 .dark-toggle {
@@ -315,9 +427,49 @@ body.dark .cd-editor { background:rgba(160,130,85,.03); border-color:rgba(160,13
 </head>
 <body>
 
+<!-- AUTH SCREEN -->
+<div id="authScreen" class="auth-screen" style="display:none">
+  <div class="auth-box">
+    <div class="auth-logo">Study <span>Checklist</span></div>
+    <div class="auth-sub">sign in to sync across all your devices</div>
+    <div class="auth-tabs">
+      <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Sign In</button>
+      <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+    </div>
+    <div id="loginForm">
+      <div class="auth-field">
+        <label>Email</label>
+        <input class="auth-input" id="loginEmail" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input class="auth-input" id="loginPassword" type="password" placeholder="••••••••" autocomplete="current-password"
+          onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="auth-btn" id="loginBtn" onclick="doLogin()">Sign In</button>
+    </div>
+    <div id="signupForm" style="display:none">
+      <div class="auth-field">
+        <label>Email</label>
+        <input class="auth-input" id="signupEmail" type="email" placeholder="you@example.com" autocomplete="email">
+      </div>
+      <div class="auth-field">
+        <label>Password</label>
+        <input class="auth-input" id="signupPassword" type="password" placeholder="min 6 characters" autocomplete="new-password"
+          onkeydown="if(event.key==='Enter')doSignup()">
+      </div>
+      <button class="auth-btn" id="signupBtn" onclick="doSignup()">Create Account</button>
+    </div>
+    <div class="auth-err" id="authErr"></div>
+    <div class="auth-ok" id="authOk"></div>
+  </div>
+</div>
+
+<!-- APP (hidden until auth) -->
+<div id="appWrapper" style="display:none">
+
 <div class="sync-bar">
   <div class="sync-bar-inner">
-    <!-- TIMER -->
     <div class="timer-wrap">
       <div class="timer-display" id="timerDisplay">00:00:00</div>
       <button class="timer-btn" id="timerBtn" onclick="toggleTimer()">▶ Start</button>
@@ -325,7 +477,9 @@ body.dark .cd-editor { background:rgba(160,130,85,.03); border-color:rgba(160,13
       <span class="timer-today" id="timerTodayLabel"></span>
     </div>
     <div class="sync-right">
-      <button class="dark-toggle" id="darkToggle" onclick="toggleDark()">☀️ Light</button>
+      <span class="user-badge" id="userBadge"></span>
+      <button class="logout-btn" onclick="doLogout()">Sign out</button>
+      <button class="dark-toggle" id="darkToggle" onclick="toggleDark()">🌙 Dark</button>
       <div class="sync-dot" id="syncDot"></div>
       <span class="sync-label" id="syncLabel">connecting…</span>
     </div>
@@ -335,7 +489,16 @@ body.dark .cd-editor { background:rgba(160,130,85,.03); border-color:rgba(160,13
 <header class="header">
   <div class="header-inner">
     <div class="header-top">
-      <h1>Biostat <span>&amp;</span> Research Methods</h1>
+      <div>
+        <h1 onclick="startEditTitle()">
+          <span id="moduleTitleDisplay">My Study Checklist</span>
+        </h1>
+        <div class="module-title-edit" id="moduleTitleEdit">
+          <input class="module-title-input" id="moduleTitleInput" placeholder="Module name…"
+            onkeydown="if(event.key==='Enter')saveTitle();if(event.key==='Escape')cancelTitle()">
+          <button class="module-title-save" onclick="saveTitle()">Save</button>
+        </div>
+      </div>
       <div class="toolbar">
         <button class="tool-btn" onclick="expandAll()">↕ Expand</button>
         <button class="tool-btn" onclick="collapseAll()">↕ Collapse</button>
@@ -358,8 +521,6 @@ body.dark .cd-editor { background:rgba(160,130,85,.03); border-color:rgba(160,13
       <div class="legend-item"><div class="legend-dot" style="background:var(--easy)"></div>Easy</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--med)"></div>Med</div>
       <div class="legend-item"><div class="legend-dot" style="background:var(--hard)"></div>Hard</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#c07840"></div>Urgent</div>
-      <div class="legend-item"><div class="legend-dot" style="background:#7aaba8"></div>Can Wait</div>
     </div>
   </div>
 </header>
@@ -377,7 +538,7 @@ body.dark .cd-editor { background:rgba(160,130,85,.03); border-color:rgba(160,13
       </div>
       <div class="cd-list" id="cdList"></div>
       <div class="cd-editor" id="cdEditor">
-        <div><label>Event name</label><input class="cd-input" id="cdName" placeholder="e.g. Final MCQ Exam"></div>
+        <div><label>Event name</label><input class="cd-input" id="cdName" placeholder="e.g. Final Exam"></div>
         <div><label>Date</label><input class="cd-input" type="date" id="cdDate"></div>
         <div><label>Color</label><div class="cd-color-row" id="cdColorRow"></div></div>
         <button class="cd-add-btn" onclick="addCountdown()">Add Countdown</button>
@@ -401,149 +562,248 @@ body.dark .cd-editor { background:rgba(160,130,85,.03); border-color:rgba(160,13
   </div>
 </div>
 
+</div><!-- /appWrapper -->
+
 <div class="toast" id="toast"></div>
 
 <script>
 const SUPABASE_URL='https://iuzcsbytkbslhurlrfnq.supabase.co';
 const SUPABASE_KEY='sb_publishable_ByID2JKtfU2Qj4s6XzkKzg_dicltyi0';
-const ROW_ID='yousef_main';
 const CD_COLORS=['#2f81f7','#3fb950','#f85149','#e3b341','#a371f7','#f97316','#79c0ff','#56d364'];
 const DIFF_CYCLE={none:'easy',easy:'med',med:'hard',hard:'none'};
+const ITEM_TYPES=['lecture','spss','sdl','field','exam','task'];
+const TYPE_CODES={lecture:'L??',spss:'SPSS',sdl:'SDL',field:'Field',exam:'EXAM',task:'Task'};
 
-// ── DEFAULT DATA (Week 5 onwards only — pre-Apr 6 moved to urgent) ──
-const URGENT_FROM_OLD=[
-  {type:"lecture",code:"L32",name:"Introduction to Biostatistics",done:false},
-  {type:"lecture",code:"L33/34",name:"Descriptive Statistics",done:false},
-  {type:"spss",code:"SPSS P1",name:"Introduction to SPSS",done:false},
-  {type:"spss",code:"SPSS P2",name:"Data Entry, Labeling and Transformations",done:false},
-  {type:"lecture",code:"L35",name:"Data Summary and Presentation",done:false},
-  {type:"lecture",code:"L36",name:"Sampling Techniques",done:false},
-  {type:"lecture",code:"L37",name:"Normal Distribution Model & Z Score",done:false},
-  {type:"spss",code:"SPSS P3",name:"Data Presentation and Descriptive Analysis",done:false},
-  {type:"lecture",code:"L38",name:"Introduction to Statistical Inference",done:false},
-  {type:"lecture",code:"L39",name:"Confidence Intervals and Confidence Limits",done:false},
-  {type:"lecture",code:"L40",name:"Introduction to Hypothesis Testing",done:false},
-  {type:"lecture",code:"L41",name:"Statistical Tests (One-Sample t-test & Independent t-test)",done:false},
-  {type:"lecture",code:"L42",name:"Statistical Tests (Paired t-test & One-Way ANOVA)",done:false},
-  {type:"lecture",code:"L43",name:"Measures of Relationship (Correlation, Chi-Square, Regression)",done:false},
-  {type:"spss",code:"SPSS P4",name:"Testing of Hypothesis and Statistical Tests",done:false},
-  {type:"spss",code:"SPSS P5",name:"Correlation and Regression Analysis",done:false},
-  {type:"sdl",code:"SDL-9",name:"Problem Solving (5): Analysis & Interpretation of Health Data",done:false},
-  {type:"spss",code:"SPSS P6",name:"Summary and Revision",done:false},
-  {type:"field",code:"Visit",name:"Field Visit Orientation",done:false},
-];
+// ── AUTH STATE ────────────────────────────────────────────────
+let currentUser=null; // {id, email, access_token}
 
-const DEFAULT_DATA={
-  urgent: URGENT_FROM_OLD.map(i=>({...i,id:uid(),diff:'none',reviews:0})),
-  weeks:[
-    {week:"Week 5 – Seminars & Field Visits",color:"purple",days:[
-      {day:"Monday · 6 April 2026",items:[{type:"field",code:"Visit",name:"Field Visit – CEES / KAUH",done:false}]},
-      {day:"Tuesday · 7 April 2026",items:[{type:"field",code:"Visit",name:"Field Visit – Albaik Factory",done:false}]},
-      {day:"Wednesday · 8 April 2026",items:[
-        {type:"sdl",code:"SDL-5",name:"Reading Research Articles",done:false},
-        {type:"lecture",code:"L44",name:"Critical Appraisal of Methods",done:false},
-        {type:"sdl",code:"SDL-10",name:"Critical Appraisal of Methods (SDL)",done:false},
-      ]},
-      {day:"Thursday · 9 April 2026",items:[
-        {type:"lecture",code:"L45",name:"Critical Appraisal of Results – 1",done:false},
-        {type:"lecture",code:"L46",name:"Critical Appraisal of Results – 2",done:false},
-        {type:"lecture",code:"L47",name:"Internal Validity of the Article",done:false},
-        {type:"sdl",code:"SDL-11",name:"Critical Appraisal of Results (SDL)",done:false},
-      ]},
-    ]},
-    {week:"Week 6 – Critical Appraisal & Exams",color:"green",days:[
-      {day:"Sunday · 12 April 2026",items:[
-        {type:"lecture",code:"L48",name:"External Validity of the Article",done:false},
-        {type:"sdl",code:"SDL-12",name:"Critical Appraisal of the Article",done:false},
-        {type:"sdl",code:"SDL-13",name:"Critical Appraisal of the Article",done:false},
-      ]},
-      {day:"Monday · 13 April 2026",items:[
-        {type:"field",code:"Assess",name:"Research Assessment",done:false},
-        {type:"sdl",code:"SDL-14",name:"Research Question and Gap Identification",done:false},
-        {type:"sdl",code:"SDL-15",name:"Proposal Preparation and Ethics Application",done:false},
-      ]},
-      {day:"Tuesday · 14 April 2026",items:[{type:"field",code:"Prep",name:"Exam Preparation",done:false}]},
-      {day:"Wednesday · 15 April 2026 🎯",items:[{type:"exam",code:"EXAM",name:"Final MCQ Exam",done:false}]},
-      {day:"Thursday · 16 April 2026 💻",items:[{type:"exam",code:"EXAM",name:"SPSS Practical Exam",done:false}]},
-    ]},
-  ]
-};
+async function authFetch(path,opts={}){
+  const h={
+    'apikey':SUPABASE_KEY,
+    'Content-Type':'application/json'
+  };
+  if(currentUser?.access_token) h['Authorization']='Bearer '+currentUser.access_token;
+  else h['Authorization']='Bearer '+SUPABASE_KEY;
+  if(opts.prefer) h['Prefer']=opts.prefer;
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),8000);
+  try{
+    const r=await fetch(SUPABASE_URL+path,{
+      method:opts.method||'GET',headers:h,
+      body:opts.body,signal:controller.signal
+    });
+    clearTimeout(timeout);
+    const t=await r.text();
+    if(!r.ok) throw new Error(t);
+    return t?JSON.parse(t):null;
+  }catch(e){clearTimeout(timeout);throw e;}
+}
+
+async function doLogin(){
+  const email=document.getElementById('loginEmail').value.trim();
+  const password=document.getElementById('loginPassword').value;
+  if(!email||!password){setAuthErr('Please fill in both fields.');return;}
+  setAuthErr('');setAuthOk('');
+  document.getElementById('loginBtn').disabled=true;
+  document.getElementById('loginBtn').textContent='Signing in…';
+  try{
+    const res=await authFetch('/auth/v1/token?grant_type=password',{
+      method:'POST',
+      body:JSON.stringify({email,password})
+    });
+    currentUser={id:res.user.id,email:res.user.email,access_token:res.access_token};
+    localStorage.setItem('study_session',JSON.stringify(currentUser));
+    showApp();
+  }catch(e){
+    let msg='Login failed. Check your credentials.';
+    try{const j=JSON.parse(e.message);if(j.error_description)msg=j.error_description;}catch{}
+    setAuthErr(msg);
+  }
+  document.getElementById('loginBtn').disabled=false;
+  document.getElementById('loginBtn').textContent='Sign In';
+}
+
+async function doSignup(){
+  const email=document.getElementById('signupEmail').value.trim();
+  const password=document.getElementById('signupPassword').value;
+  if(!email||!password){setAuthErr('Please fill in both fields.');return;}
+  if(password.length<6){setAuthErr('Password must be at least 6 characters.');return;}
+  setAuthErr('');setAuthOk('');
+  document.getElementById('signupBtn').disabled=true;
+  document.getElementById('signupBtn').textContent='Creating…';
+  try{
+    const res=await authFetch('/auth/v1/signup',{
+      method:'POST',
+      body:JSON.stringify({email,password})
+    });
+    // Auto sign-in if token returned (email confirmation off)
+    if(res.access_token){
+      currentUser={id:res.user.id,email:res.user.email,access_token:res.access_token};
+      localStorage.setItem('study_session',JSON.stringify(currentUser));
+      showApp();
+    } else {
+      setAuthOk('Account created! Check your email to confirm, then sign in.');
+      switchTab('login');
+    }
+  }catch(e){
+    let msg='Signup failed.';
+    try{const j=JSON.parse(e.message);if(j.msg)msg=j.msg;else if(j.error_description)msg=j.error_description;}catch{}
+    setAuthErr(msg);
+  }
+  document.getElementById('signupBtn').disabled=false;
+  document.getElementById('signupBtn').textContent='Create Account';
+}
+
+function doLogout(){
+  currentUser=null;
+  localStorage.removeItem('study_session');
+  state={title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};
+  document.getElementById('appWrapper').style.display='none';
+  document.getElementById('authScreen').style.display='flex';
+  document.getElementById('loginEmail').value='';
+  document.getElementById('loginPassword').value='';
+  setAuthErr('');setAuthOk('');
+}
+
+function setAuthErr(m){document.getElementById('authErr').textContent=m;}
+function setAuthOk(m){document.getElementById('authOk').textContent=m;}
+function switchTab(t){
+  document.getElementById('loginForm').style.display=t==='login'?'block':'none';
+  document.getElementById('signupForm').style.display=t==='signup'?'block':'none';
+  document.getElementById('tabLogin').className='auth-tab'+(t==='login'?' active':'');
+  document.getElementById('tabSignup').className='auth-tab'+(t==='signup'?' active':'');
+  setAuthErr('');setAuthOk('');
+}
+
+function showApp(){
+  document.getElementById('authScreen').style.display='none';
+  document.getElementById('appWrapper').style.display='block';
+  document.getElementById('userBadge').textContent=currentUser.email;
+  initTheme();
+  initTimer();
+  todayTasks=loadTodayTasks();
+  countdowns=loadCountdowns();
+  loadFromCloud().then(()=>{
+    render();renderToday();renderCountdowns();renderHistory();
+  });
+}
 
 // ── STATE ─────────────────────────────────────────────────────
-let state={urgent:[],weeks:[]};
+let state={title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};
 let dragSrc=null,saveTimer=null;
 
 function uid(){return Math.random().toString(36).slice(2,9);}
 function ensureIds(){
   if(!state.canwait)state.canwait=[];
+  if(!state.title)state.title='My Study Checklist';
   (state.urgent||[]).forEach(i=>{if(!i.id)i.id=uid();if(!i.diff)i.diff='none';if(!i.reviews)i.reviews=0;if(i.done===undefined)i.done=false;});
   (state.canwait||[]).forEach(i=>{if(!i.id)i.id=uid();if(!i.diff)i.diff='none';if(!i.reviews)i.reviews=0;if(i.done===undefined)i.done=false;});
-  (state.weeks||[]).forEach(w=>w.days.forEach(d=>d.items.forEach(i=>{if(!i.id)i.id=uid();if(!i.diff)i.diff='none';if(!i.reviews)i.reviews=0;if(i.done===undefined)i.done=false;})));
+  (state.weeks||[]).forEach(w=>{
+    if(!w.color)w.color='blue';
+    w.days.forEach(d=>d.items.forEach(i=>{if(!i.id)i.id=uid();if(!i.diff)i.diff='none';if(!i.reviews)i.reviews=0;if(i.done===undefined)i.done=false;}));
+  });
 }
 
-// ── SUPABASE ──────────────────────────────────────────────────
-async function dbFetch(path,opts={}){
-  const h={'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json'};
-  if(opts.prefer)h['Prefer']=opts.prefer;
-  const controller=new AbortController();
-  const timeout=setTimeout(()=>controller.abort(),5000);
-  try{
-    const r=await fetch(SUPABASE_URL+'/rest/v1/'+path,{method:opts.method||'GET',headers:h,body:opts.body,signal:controller.signal});
-    clearTimeout(timeout);
-    if(!r.ok)throw new Error(await r.text());
-    const t=await r.text();return t?JSON.parse(t):null;
-  }catch(e){clearTimeout(timeout);throw e;}
-}
+// ── SUPABASE DATA (per user) ───────────────────────────────────
+function rowId(){return 'user_'+currentUser.id;}
+
 async function loadFromCloud(){
   setSyncState('syncing','loading…');
   try{
-    const rows=await dbFetch(`checklist?id=eq.${ROW_ID}&select=data`);
+    const rows=await authFetch(`/rest/v1/checklist?id=eq.${rowId()}&select=data`);
     if(rows&&rows.length>0&&rows[0].data){
       const d=rows[0].data;
-      // handle both old format (array) and new format (object with urgent+weeks)
       if(Array.isArray(d)){
-        state={urgent:JSON.parse(JSON.stringify(DEFAULT_DATA.urgent)),weeks:d};
+        state={title:'My Study Checklist',urgent:[],canwait:[],weeks:d};
       } else {
         state=d;
-        if(!state.urgent)state.urgent=JSON.parse(JSON.stringify(DEFAULT_DATA.urgent));
+        if(!state.urgent)state.urgent=[];
+        if(!state.canwait)state.canwait=[];
         if(!state.weeks)state.weeks=[];
       }
     } else {
-      state=JSON.parse(JSON.stringify(DEFAULT_DATA));
-      ensureIds();await saveToCloud(true);
+      // New user — empty state, upsert row
+      state={title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};
+      ensureIds();
+      await saveToCloud(true);
     }
-    ensureIds();setSyncState('synced','synced');
+    ensureIds();
+    setSyncState('synced','synced');
   }catch(e){
     console.error(e);
-    try{const s=localStorage.getItem('biostats_v4');state=s?JSON.parse(s):JSON.parse(JSON.stringify(DEFAULT_DATA));}
-    catch{state=JSON.parse(JSON.stringify(DEFAULT_DATA));}
+    const lsKey='study_local_'+currentUser.id;
+    try{const s=localStorage.getItem(lsKey);state=s?JSON.parse(s):{title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};}
+    catch{state={title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};}
     ensureIds();setSyncState('error','offline – local only');
     showToast('Cloud unreachable, using local',true);
   }
 }
+
 async function saveToCloud(){
   setSyncState('syncing','saving…');
+  const lsKey='study_local_'+currentUser.id;
   try{
-    await dbFetch(`checklist?id=eq.${ROW_ID}`,{method:'PATCH',prefer:'return=minimal',body:JSON.stringify({data:state,updated_at:new Date().toISOString()})});
-    localStorage.setItem('biostats_v4',JSON.stringify(state));
-    setSyncState('synced','saved ✓');setTimeout(()=>setSyncState('synced','synced'),2000);
-  }catch(e){localStorage.setItem('biostats_v4',JSON.stringify(state));setSyncState('error','cloud error – saved locally');}
+    await authFetch(`/rest/v1/checklist?id=eq.${rowId()}`,{
+      method:'PATCH',
+      prefer:'return=minimal',
+      body:JSON.stringify({data:state,updated_at:new Date().toISOString()})
+    });
+    // If PATCH returned nothing (row doesn't exist yet), do upsert
+    localStorage.setItem(lsKey,JSON.stringify(state));
+    setSyncState('synced','saved ✓');
+    setTimeout(()=>setSyncState('synced','synced'),2000);
+  }catch(e){
+    // Try upsert
+    try{
+      await authFetch(`/rest/v1/checklist`,{
+        method:'POST',
+        prefer:'resolution=merge-duplicates',
+        body:JSON.stringify({id:rowId(),data:state,updated_at:new Date().toISOString()})
+      });
+      localStorage.setItem(lsKey,JSON.stringify(state));
+      setSyncState('synced','saved ✓');
+      setTimeout(()=>setSyncState('synced','synced'),2000);
+    }catch(e2){
+      localStorage.setItem(lsKey,JSON.stringify(state));
+      setSyncState('error','cloud error – saved locally');
+    }
+  }
 }
+
 function scheduleSave(){clearTimeout(saveTimer);saveTimer=setTimeout(()=>saveToCloud(),900);}
-function setSyncState(s,l){document.getElementById('syncDot').className='sync-dot '+s;document.getElementById('syncLabel').textContent=l;}
+function setSyncState(s,l){
+  const dot=document.getElementById('syncDot');
+  const lbl=document.getElementById('syncLabel');
+  if(dot)dot.className='sync-dot '+s;
+  if(lbl)lbl.textContent=l;
+}
+
+// ── MODULE TITLE ──────────────────────────────────────────────
+function startEditTitle(){
+  document.getElementById('moduleTitleInput').value=state.title||'My Study Checklist';
+  document.getElementById('moduleTitleEdit').classList.add('visible');
+  document.getElementById('moduleTitleInput').focus();
+}
+function saveTitle(){
+  const val=document.getElementById('moduleTitleInput').value.trim();
+  if(val){state.title=val;document.getElementById('moduleTitleDisplay').textContent=val;}
+  document.getElementById('moduleTitleEdit').classList.remove('visible');
+  scheduleSave();
+}
+function cancelTitle(){
+  document.getElementById('moduleTitleEdit').classList.remove('visible');
+}
 
 // ── TIMER ─────────────────────────────────────────────────────
 let timerRunning=false,timerSeconds=0,timerInterval=null;
-
 function timerKey(){const d=new Date();return `timer_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;}
 function loadTimerToday(){return parseInt(localStorage.getItem(timerKey())||'0');}
 function saveTimerToday(s){localStorage.setItem(timerKey(),s);}
-
 function initTimer(){
-  timerSeconds=0;
-  updateTimerDisplay();
-  const todayTotal=loadTimerToday();
-  document.getElementById('timerTodayLabel').textContent=todayTotal>0?`today: ${fmtSecs(todayTotal)}`:'';
+  timerSeconds=0;updateTimerDisplay();
+  const tot=loadTimerToday();
+  const lbl=document.getElementById('timerTodayLabel');
+  if(lbl)lbl.textContent=tot>0?`today: ${fmtSecs(tot)}`:'';
 }
 function toggleTimer(){
   timerRunning=!timerRunning;
@@ -555,34 +815,27 @@ function toggleTimer(){
   }else{
     btn.textContent='▶ Start';btn.classList.remove('running');disp.classList.remove('running');
     clearInterval(timerInterval);
-    // add to today's total
-    const prev=loadTimerToday();
-    saveTimerToday(prev+timerSeconds);
-    timerSeconds=0;
-    updateTimerDisplay();
+    const prev=loadTimerToday();saveTimerToday(prev+timerSeconds);timerSeconds=0;updateTimerDisplay();
     document.getElementById('timerTodayLabel').textContent=`today: ${fmtSecs(loadTimerToday())}`;
   }
 }
-function resetTimer(){
-  if(timerRunning)toggleTimer();
-  timerSeconds=0;updateTimerDisplay();
-}
-function updateTimerDisplay(){document.getElementById('timerDisplay').textContent=fmtSecs(timerSeconds);}
+function resetTimer(){if(timerRunning)toggleTimer();timerSeconds=0;updateTimerDisplay();}
+function updateTimerDisplay(){const d=document.getElementById('timerDisplay');if(d)d.textContent=fmtSecs(timerSeconds);}
 function fmtSecs(s){const h=Math.floor(s/3600),m=Math.floor((s%3600)/60),ss=s%60;return `${pad(h)}:${pad(m)}:${pad(ss)}`;}
 function pad(n){return String(n).padStart(2,'0');}
 
 // ── RENDER ────────────────────────────────────────────────────
-const WEEK_COLORS={blue:'var(--blue)',purple:'var(--purple)',green:'var(--green)'};
+const WEEK_COLORS={blue:'var(--blue)',purple:'var(--purple)',green:'var(--green)',amber:'var(--amber)',red:'var(--red)',teal:'var(--teal)'};
 
 function render(){
   const app=document.getElementById('app');app.innerHTML='';
+  document.getElementById('moduleTitleDisplay').textContent=state.title||'My Study Checklist';
 
-  // PRIORITY ROW (urgent + canwait side by side)
+  // PRIORITY ROW
   const urg=state.urgent||[];
   const cw=state.canwait||[];
   const urgDone=urg.filter(i=>i.done).length;
   const cwDone=cw.filter(i=>i.done).length;
-
   const prioRow=document.createElement('div');prioRow.className='priority-row';
 
   // URGENT
@@ -593,10 +846,7 @@ function render(){
   </div>
   <ul class="urgent-items" data-zone="urgent"></ul>
   <div class="add-item-row">
-    <select class="add-type-select" id="type_urgent">
-      <option value="lecture">Lecture</option><option value="spss">SPSS</option>
-      <option value="sdl">SDL</option><option value="field">Field</option><option value="exam">Exam</option>
-    </select>
+    <select class="add-type-select" id="type_urgent">${typeOptions()}</select>
     <input class="add-input" id="add_urgent" placeholder="Add…" onkeydown="if(event.key==='Enter')addZoneItem('urgent')">
     <button class="add-btn" onclick="addZoneItem('urgent')">+</button>
   </div>`;
@@ -612,10 +862,7 @@ function render(){
   </div>
   <ul class="canwait-items" data-zone="canwait"></ul>
   <div class="add-item-row">
-    <select class="add-type-select" id="type_canwait">
-      <option value="lecture">Lecture</option><option value="spss">SPSS</option>
-      <option value="sdl">SDL</option><option value="field">Field</option><option value="exam">Exam</option>
-    </select>
+    <select class="add-type-select" id="type_canwait">${typeOptions()}</select>
     <input class="add-input" id="add_canwait" placeholder="Add…" onkeydown="if(event.key==='Enter')addZoneItem('canwait')">
     <button class="add-btn" onclick="addZoneItem('canwait')">+</button>
   </div>`;
@@ -623,35 +870,52 @@ function render(){
   cw.forEach((item,ii)=>cwUl.appendChild(makeItemEl('canwait',0,ii,item)));
   setupDragDrop(cwUl);
 
-  prioRow.appendChild(urgSec);
-  prioRow.appendChild(cwSec);
+  prioRow.appendChild(urgSec);prioRow.appendChild(cwSec);
   app.appendChild(prioRow);
 
   // WEEKS
+  if(!state.weeks||!state.weeks.length){
+    const empty=document.createElement('div');
+    empty.className='empty-state';
+    empty.innerHTML=`<strong>No weeks yet</strong>Add your first week below to get started.<br>Each week can have multiple days with study items.`;
+    app.appendChild(empty);
+  }
+
   (state.weeks||[]).forEach((week,wi)=>{
     const wc=WEEK_COLORS[week.color]||'var(--blue)';
     const tot=week.days.reduce((s,d)=>s+d.items.length,0);
     const don=week.days.reduce((s,d)=>s+d.items.filter(i=>i.done).length,0);
     const weekEl=document.createElement('div');weekEl.className='week';
     weekEl.innerHTML=`<div class="week-header">
-      <span class="week-title" style="color:${wc}">${week.week}</span>
+      <span class="week-title" style="color:${wc}" ondblclick="startEditWeekName(${wi},this)" title="Double-click to rename">${escHtml(week.week)}</span>
       <div class="week-line" style="background:linear-gradient(90deg,${wc}33,transparent)"></div>
-      <span class="week-count">${don}/${tot}</span></div>`;
+      <div class="week-actions">
+        <span class="week-count">${don}/${tot}</span>
+        <select class="week-action-btn" onchange="changeWeekColor(${wi},this.value)" title="Color" style="font-size:11px;padding:2px 4px;">
+          <option value="blue" ${week.color==='blue'?'selected':''}>🔵</option>
+          <option value="purple" ${week.color==='purple'?'selected':''}>🟣</option>
+          <option value="green" ${week.color==='green'?'selected':''}>🟢</option>
+          <option value="amber" ${week.color==='amber'?'selected':''}>🟡</option>
+          <option value="red" ${week.color==='red'?'selected':''}>🔴</option>
+          <option value="teal" ${week.color==='teal'?'selected':''}>🩵</option>
+        </select>
+        <button class="week-action-btn del" onclick="deleteWeek(${wi})" title="Delete week">✕ week</button>
+      </div>
+    </div>`;
+
     week.days.forEach((day,di)=>{
       const dc=day.items.filter(i=>i.done).length;
       const block=document.createElement('div');block.className='day-block';
       block.innerHTML=`<div class="day-header" onclick="toggleCollapse(this.closest('.day-block'))">
-        <span class="day-name">${day.day}</span>
+        <span class="day-name" ondblclick="event.stopPropagation();startEditDayName(${wi},${di},this)" title="Double-click to rename">${escHtml(day.day)}</span>
         <div class="day-actions">
           <span class="day-progress-text">${dc}/${day.items.length}</span>
+          <button class="day-del-btn" onclick="event.stopPropagation();deleteDay(${wi},${di})" title="Delete day">✕</button>
           <button class="collapse-btn" onclick="event.stopPropagation();toggleCollapse(this.closest('.day-block'))">▾</button>
         </div></div>
         <ul class="items-list" data-wi="${wi}" data-di="${di}"></ul>
         <div class="add-item-row">
-          <select class="add-type-select" id="type_${wi}_${di}">
-            <option value="lecture">Lecture</option><option value="spss">SPSS</option>
-            <option value="sdl">SDL</option><option value="field">Field</option><option value="exam">Exam</option>
-          </select>
+          <select class="add-type-select" id="type_${wi}_${di}">${typeOptions()}</select>
           <input class="add-input" id="add_${wi}_${di}" placeholder="Add item…" onkeydown="if(event.key==='Enter')addItem(${wi},${di})">
           <button class="add-btn" onclick="addItem(${wi},${di})">+</button>
         </div>`;
@@ -659,11 +923,105 @@ function render(){
       day.items.forEach((item,ii)=>ul.appendChild(makeItemEl(wi,di,ii,item)));
       setupDragDrop(ul);weekEl.appendChild(block);
     });
+
+    // Add day row
+    const addDayDiv=document.createElement('div');addDayDiv.className='add-day-row';
+    addDayDiv.innerHTML=`<span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);white-space:nowrap">+ day</span>
+      <input class="add-day-input" id="addday_${wi}" placeholder="e.g. Monday · 28 April 2026"
+        onkeydown="if(event.key==='Enter')addDay(${wi})">
+      <button class="add-day-btn" onclick="addDay(${wi})">+</button>`;
+    weekEl.appendChild(addDayDiv);
     app.appendChild(weekEl);
   });
+
+  // Add week row
+  const addWeekDiv=document.createElement('div');addWeekDiv.className='add-week-row';
+  addWeekDiv.innerHTML=`<span style="font-family:'DM Mono',monospace;font-size:10px;color:var(--text-dim);white-space:nowrap">+ week</span>
+    <input class="add-week-input" id="addWeekInput" placeholder="e.g. Week 1 – Anatomy" onkeydown="if(event.key==='Enter')addWeek()">
+    <select class="add-week-select" id="addWeekColor">
+      <option value="blue">🔵 Blue</option>
+      <option value="purple">🟣 Purple</option>
+      <option value="green">🟢 Green</option>
+      <option value="amber">🟡 Amber</option>
+      <option value="red">🔴 Red</option>
+      <option value="teal">🩵 Teal</option>
+    </select>
+    <button class="add-week-btn" onclick="addWeek()">+</button>`;
+  app.appendChild(addWeekDiv);
+
   updateProgress();
 }
 
+function typeOptions(){
+  return ITEM_TYPES.map(t=>`<option value="${t}">${t.charAt(0).toUpperCase()+t.slice(1)}</option>`).join('');
+}
+
+// ── WEEK / DAY MANAGEMENT ─────────────────────────────────────
+function addWeek(){
+  const input=document.getElementById('addWeekInput');
+  const colorEl=document.getElementById('addWeekColor');
+  const name=input.value.trim();
+  if(!name){input.focus();return;}
+  state.weeks.push({week:name,color:colorEl.value,days:[]});
+  input.value='';scheduleSave();render();
+}
+
+function deleteWeek(wi){
+  if(!confirm(`Delete week "${state.weeks[wi].week}" and all its days?`))return;
+  state.weeks.splice(wi,1);scheduleSave();render();
+}
+
+function addDay(wi){
+  const input=document.getElementById(`addday_${wi}`);
+  const name=input.value.trim();
+  if(!name){input.focus();return;}
+  state.weeks[wi].days.push({day:name,items:[]});
+  input.value='';scheduleSave();render();
+}
+
+function deleteDay(wi,di){
+  const day=state.weeks[wi].days[di];
+  if(day.items.length>0&&!confirm(`Delete "${day.day}" and its ${day.items.length} item(s)?`))return;
+  state.weeks[wi].days.splice(di,1);scheduleSave();render();
+}
+
+function changeWeekColor(wi,color){
+  state.weeks[wi].color=color;scheduleSave();render();
+}
+
+// Inline rename — week
+function startEditWeekName(wi,el){
+  el.contentEditable='true';el.focus();
+  el.dataset.orig=el.textContent;
+  const r=document.createRange();r.selectNodeContents(el);r.collapse(false);
+  window.getSelection().removeAllRanges();window.getSelection().addRange(r);
+  el.onblur=()=>endEditWeekName(wi,el);
+  el.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();el.blur();}if(e.key==='Escape'){el.textContent=el.dataset.orig;el.blur();}};
+}
+function endEditWeekName(wi,el){
+  el.contentEditable='false';
+  const n=el.textContent.trim();
+  if(n){state.weeks[wi].week=n;scheduleSave();}
+  else el.textContent=state.weeks[wi].week;
+}
+
+// Inline rename — day
+function startEditDayName(wi,di,el){
+  el.contentEditable='true';el.focus();
+  el.dataset.orig=el.textContent;
+  const r=document.createRange();r.selectNodeContents(el);r.collapse(false);
+  window.getSelection().removeAllRanges();window.getSelection().addRange(r);
+  el.onblur=()=>endEditDayName(wi,di,el);
+  el.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();el.blur();}if(e.key==='Escape'){el.textContent=el.dataset.orig;el.blur();}};
+}
+function endEditDayName(wi,di,el){
+  el.contentEditable='false';
+  const n=el.textContent.trim();
+  if(n){state.weeks[wi].days[di].day=n;scheduleSave();}
+  else el.textContent=state.weeks[wi].days[di].day;
+}
+
+// ── ITEM ELEMENT ──────────────────────────────────────────────
 function makeItemEl(wi,di,ii,item){
   const zone=wi==='urgent'||wi==='canwait'?wi:null;
   const li=document.createElement('li');
@@ -676,9 +1034,22 @@ function makeItemEl(wi,di,ii,item){
   const reviews=item.reviews||0;
   const badgeType=zone?zone:item.type;
 
+  // Build move menu options — for week items show weeks, for zone items don't show that zone
+  let moveMenuItems='';
+  if(wi!=='urgent') moveMenuItems+=`<div class="move-menu-item" onclick="moveItem('${wi}',${di},${ii},'urgent')">🔥 Urgent</div>`;
+  if(wi!=='canwait') moveMenuItems+=`<div class="move-menu-item" onclick="moveItem('${wi}',${di},${ii},'canwait')">🧘 Can Wait</div>`;
+  // Week targets
+  (state.weeks||[]).forEach((wk,twi)=>{
+    if(String(twi)!==String(wi)||di!==0){
+      wk.days.forEach((d,tdi)=>{
+        moveMenuItems+=`<div class="move-menu-item" onclick="moveItem('${wi}',${di},${ii},'week',${twi},${tdi})">${escHtml(wk.week.split('–')[0].trim())} › ${escHtml(d.day.split('·')[0].trim()||d.day)}</div>`;
+      });
+    }
+  });
+
   li.innerHTML=`<span class="drag-handle">⠿</span>
     <div class="item-checkbox" onclick="toggleDone('${wi}',${di},${ii})">✓</div>
-    <span class="item-badge badge-${badgeType}">${escHtml(item.code)}</span>
+    <span class="item-badge badge-${escHtml(badgeType)}">${escHtml(item.code)}</span>
     <span class="diff-badge ${diffClass}" onclick="cycleDiff('${wi}',${di},${ii})" title="Click to change difficulty">${diffLabel}</span>
     <span class="item-name" contenteditable="false"
       ondblclick="startEdit(this,'${wi}',${di},${ii})"
@@ -692,9 +1063,7 @@ function makeItemEl(wi,di,ii,item){
     <button class="move-btn" onclick="toggleMoveMenu(event,'${wi}',${di},${ii})" title="Move to section">⇄</button>
     <div class="move-menu" id="mm_${wi}_${di}_${ii}">
       <div class="move-menu-title">Move to…</div>
-      <div class="move-menu-item" onclick="moveItem('${wi}',${di},${ii},'urgent')">🔥 Urgent</div>
-      <div class="move-menu-item" onclick="moveItem('${wi}',${di},${ii},'canwait')">🧘 Can Wait</div>
-      <div class="move-menu-item" onclick="moveItem('${wi}',${di},${ii},'weeks')">📚 Back to Schedule</div>
+      ${moveMenuItems}
     </div>
     <button class="item-del" onclick="deleteItem('${wi}',${di},${ii})">×</button>`;
 
@@ -759,7 +1128,7 @@ function toggleMoveMenu(e,wi,di,ii){
   document.getElementById(id)?.classList.toggle('open');
 }
 
-function moveItem(wi,di,ii,dest){
+function moveItem(wi,di,ii,dest,destWi,destDi){
   const item=getItem(wi,di,ii);
   // remove from source
   if(wi==='urgent')state.urgent.splice(ii,1);
@@ -768,32 +1137,24 @@ function moveItem(wi,di,ii,dest){
   // add to destination
   if(dest==='urgent'){if(!state.urgent)state.urgent=[];state.urgent.push(item);}
   else if(dest==='canwait'){if(!state.canwait)state.canwait=[];state.canwait.push(item);}
-  else{
-    // dest==='weeks' — move to first day of first week that makes sense
-    if(state.weeks&&state.weeks.length>0){
-      const firstDay=state.weeks[0].days[0];
-      if(firstDay)firstDay.items.push(item);
-    }
-  }
+  else if(dest==='week'){state.weeks[destWi].days[destDi].items.push(item);}
   document.querySelectorAll('.move-menu.open').forEach(m=>m.classList.remove('open'));
   scheduleSave();render();
-  showToast('Moved to '+dest+'!');
+  showToast('Moved!');
 }
 
 function addZoneItem(zone){
   const input=document.getElementById('add_'+zone),typeEl=document.getElementById('type_'+zone);
   const name=input.value.trim();if(!name){input.focus();return;}
-  const codes={lecture:'L??',spss:'SPSS',sdl:'SDL',field:'Field',exam:'EXAM'};
   if(!state[zone])state[zone]=[];
-  state[zone].push({id:uid(),type:typeEl.value,code:codes[typeEl.value],name,done:false,diff:'none',reviews:0});
+  state[zone].push({id:uid(),type:typeEl.value,code:TYPE_CODES[typeEl.value]||typeEl.value,name,done:false,diff:'none',reviews:0});
   input.value='';scheduleSave();render();
 }
 
 function addItem(wi,di){
   const input=document.getElementById(`add_${wi}_${di}`),typeEl=document.getElementById(`type_${wi}_${di}`);
   const name=input.value.trim();if(!name){input.focus();return;}
-  const codes={lecture:'L??',spss:'SPSS',sdl:'SDL',field:'Field',exam:'EXAM'};
-  state.weeks[wi].days[di].items.push({id:uid(),type:typeEl.value,code:codes[typeEl.value],name,done:false,diff:'none',reviews:0});
+  state.weeks[wi].days[di].items.push({id:uid(),type:typeEl.value,code:TYPE_CODES[typeEl.value]||typeEl.value,name,done:false,diff:'none',reviews:0});
   input.value='';scheduleSave();render();
 }
 
@@ -813,10 +1174,12 @@ function updateProgress(){
   (state.urgent||[]).forEach(i=>{t++;if(i.done)d++;});
   (state.canwait||[]).forEach(i=>{t++;if(i.done)d++;});
   (state.weeks||[]).forEach(w=>w.days.forEach(dy=>dy.items.forEach(i=>{t++;if(i.done)d++;})));
-  document.getElementById('progressFill').style.width=t?`${d/t*100}%`:'0%';
-  document.getElementById('progressLabel').textContent=`${d} / ${t}`;
+  const fill=document.getElementById('progressFill');
+  const lbl=document.getElementById('progressLabel');
+  if(fill)fill.style.width=t?`${d/t*100}%`:'0%';
+  if(lbl)lbl.textContent=`${d} / ${t}`;
 }
-function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='biostats.json';a.click();showToast('Exported!');}
+function exportData(){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(state,null,2)],{type:'application/json'}));a.download='study-checklist.json';a.click();showToast('Exported!');}
 function triggerImport(){document.getElementById('importFile').click();}
 function importData(e){const file=e.target.files[0];if(!file)return;const r=new FileReader();r.onload=ev=>{try{state=JSON.parse(ev.target.result);ensureIds();scheduleSave();render();showToast('Imported!');}catch{showToast('Invalid file',true);}};r.readAsText(file);e.target.value='';}
 
@@ -825,11 +1188,11 @@ let todayTasks=[];
 function todayKey(){const d=new Date();return `today_${d.getFullYear()}_${d.getMonth()}_${d.getDate()}`;}
 function loadTodayTasks(){try{return JSON.parse(localStorage.getItem(todayKey())||'[]');}catch{return[];}}
 function saveTodayTasks(t){localStorage.setItem(todayKey(),JSON.stringify(t));}
-
 function renderToday(){
   const today=new Date();
-  document.getElementById('todayDateLabel').textContent=today.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
-  const ul=document.getElementById('todayList');ul.innerHTML='';
+  const lbl=document.getElementById('todayDateLabel');
+  if(lbl)lbl.textContent=today.toLocaleDateString('en-US',{weekday:'long',month:'long',day:'numeric'});
+  const ul=document.getElementById('todayList');if(!ul)return;ul.innerHTML='';
   if(!todayTasks.length){ul.innerHTML='<div class="today-empty">Add something to focus on today</div>';return;}
   todayTasks.forEach((task,i)=>{
     const li=document.createElement('li');li.className='today-task'+(task.done?' done':'');
@@ -850,12 +1213,10 @@ function endEditToday(el,i){el.contentEditable='false';const n=el.textContent.tr
 
 // ── DAILY HISTORY ─────────────────────────────────────────────
 function getHistoryKeys(){
-  return Object.keys(localStorage)
-    .filter(k=>k.startsWith('today_'))
-    .sort().reverse();
+  return Object.keys(localStorage).filter(k=>k.startsWith('today_')).sort().reverse();
 }
 function renderHistory(){
-  const list=document.getElementById('historyList');list.innerHTML='';
+  const list=document.getElementById('historyList');if(!list)return;list.innerHTML='';
   const keys=getHistoryKeys();
   if(!keys.length){list.innerHTML='<div class="history-empty">No history yet</div>';return;}
   keys.forEach(key=>{
@@ -882,11 +1243,11 @@ function renderHistory(){
 // ── COUNTDOWNS ────────────────────────────────────────────────
 let countdowns=[];
 let selectedColor=CD_COLORS[0];
-function loadCountdowns(){try{return JSON.parse(localStorage.getItem('biostats_countdowns')||'null')||[{id:uid(),name:'Final MCQ Exam',date:'2026-04-15',color:'#f85149'},{id:uid(),name:'SPSS Practical',date:'2026-04-16',color:'#e3b341'}];}catch{return[];}}
-function saveCountdowns(cd){localStorage.setItem('biostats_countdowns',JSON.stringify(cd));}
-function renderCdColorPicker(){const row=document.getElementById('cdColorRow');row.innerHTML='';CD_COLORS.forEach(c=>{const sw=document.createElement('div');sw.className='cd-color-swatch'+(c===selectedColor?' active':'');sw.style.background=c;sw.onclick=()=>{selectedColor=c;renderCdColorPicker();};row.appendChild(sw);});}
+function loadCountdowns(){try{return JSON.parse(localStorage.getItem('study_countdowns')||'null')||[];}catch{return[];}}
+function saveCountdowns(cd){localStorage.setItem('study_countdowns',JSON.stringify(cd));}
+function renderCdColorPicker(){const row=document.getElementById('cdColorRow');if(!row)return;row.innerHTML='';CD_COLORS.forEach(c=>{const sw=document.createElement('div');sw.className='cd-color-swatch'+(c===selectedColor?' active':'');sw.style.background=c;sw.onclick=()=>{selectedColor=c;renderCdColorPicker();};row.appendChild(sw);});}
 function renderCountdowns(){
-  const list=document.getElementById('cdList');list.innerHTML='';
+  const list=document.getElementById('cdList');if(!list)return;list.innerHTML='';
   if(!countdowns.length){list.innerHTML='<div style="padding:10px 13px;font-size:11px;color:var(--text-dim);font-style:italic;text-align:center">No countdowns yet</div>';return;}
   const now=new Date();now.setHours(0,0,0,0);
   countdowns.forEach((cd,i)=>{
@@ -909,38 +1270,42 @@ function deleteCountdown(i){countdowns.splice(i,1);saveCountdowns(countdowns);re
 function showToast(msg,isErr=false){const t=document.getElementById('toast');t.textContent=msg;t.className='toast show'+(isErr?' err':'');clearTimeout(t._tid);t._tid=setTimeout(()=>t.classList.remove('show'),2400);}
 function escHtml(s){return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
 
-// ── INIT ──────────────────────────────────────────────────────
-todayTasks=loadTodayTasks();
-countdowns=loadCountdowns();
-initTimer();
-
 // ── DARK MODE ─────────────────────────────────────────────────
 function toggleDark(){
-  const isDark = document.body.classList.toggle('dark');
-  localStorage.setItem('biostats_theme', isDark ? 'dark' : 'light');
-  document.getElementById('darkToggle').textContent = isDark ? '☀️ Light' : '🌙 Dark';
+  const isDark=document.body.classList.toggle('dark');
+  localStorage.setItem('study_theme',isDark?'dark':'light');
+  const btn=document.getElementById('darkToggle');
+  if(btn)btn.textContent=isDark?'☀️ Light':'🌙 Dark';
 }
 function initTheme(){
-  const saved = localStorage.getItem('biostats_theme');
-  if(saved === 'dark'){
+  const saved=localStorage.getItem('study_theme');
+  if(saved==='dark'){
     document.body.classList.add('dark');
-    document.getElementById('darkToggle').textContent = '☀️ Light';
-  } else {
-    document.getElementById('darkToggle').textContent = '🌙 Dark';
+    const btn=document.getElementById('darkToggle');
+    if(btn)btn.textContent='☀️ Light';
   }
 }
-initTheme();
 
+// ── INIT ──────────────────────────────────────────────────────
 document.addEventListener('click',()=>{
   document.querySelectorAll('.move-menu.open').forEach(m=>m.classList.remove('open'));
 });
 
-loadFromCloud().then(()=>{
-  render();
-  renderToday();
-  renderCountdowns();
-  renderHistory();
-});
+// Apply saved theme immediately (even before auth)
+(()=>{const t=localStorage.getItem('study_theme');if(t==='dark')document.body.classList.add('dark');})();
+
+// Check for saved session
+(()=>{
+  const saved=localStorage.getItem('study_session');
+  if(saved){
+    try{
+      currentUser=JSON.parse(saved);
+      showApp();
+      return;
+    }catch{}
+  }
+  document.getElementById('authScreen').style.display='flex';
+})();
 </script>
 </body>
 </html>
