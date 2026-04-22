@@ -707,8 +707,13 @@ function ensureIds(){
 // ── SUPABASE DATA (per user) ───────────────────────────────────
 function rowId(){return 'user_'+currentUser.id;}
 
+function getDefaultState(){
+  return {"title":"My Study Checklist","urgent":[],"canwait":[],"weeks":[{"week":"week one","color":"blue","days":[{"day":"Tuesday","items":[{"id":"2b0058p","type":"lecture","code":"L??","name":"AS","done":true,"diff":"med","reviews":0}]},{"day":"Wednesday","items":[{"id":"6nio72h","type":"lecture","code":"L??","name":"pedia","done":false,"diff":"none","reviews":0},{"id":"4nfj4vu","type":"lecture","code":"L??","name":"neurology in ophthalmology","done":false,"diff":"none","reviews":0},{"id":"nmrgxt3","type":"lecture","code":"L??","name":"Posterior Segment","done":false,"diff":"none","reviews":0}]},{"day":"Thursday","items":[{"id":"juiw1rc","type":"lecture","code":"L??","name":"Oculoplasty","done":false,"diff":"none","reviews":0}]}]},{"week":"second week","color":"blue","days":[{"day":"Sunday","items":[]},{"day":"Monday","items":[]},{"day":"Tuesday","items":[{"id":"vbv4fxr","type":"exam","code":"EXAM","name":"MED-exam","done":false,"diff":"none","reviews":0}]}]}]};
+}
+
 async function loadFromCloud(){
   setSyncState('syncing','loading…');
+  const lsKey='study_local_'+currentUser.id;
   try{
     const rows=await authFetch(`/rest/v1/checklist?id=eq.${rowId()}&select=data`);
     if(rows&&rows.length>0&&rows[0].data){
@@ -722,18 +727,18 @@ async function loadFromCloud(){
         if(!state.weeks)state.weeks=[];
       }
     } else {
-      // New user — empty state, upsert row
-      state={title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};
+      // No cloud row yet — use local backup if exists, else use exported data
+      const local=localStorage.getItem(lsKey);
+      state=local?JSON.parse(local):getDefaultState();
       ensureIds();
-      await saveToCloud(true);
+      await saveToCloud();
     }
     ensureIds();
     setSyncState('synced','synced');
   }catch(e){
     console.error(e);
-    const lsKey='study_local_'+currentUser.id;
-    try{const s=localStorage.getItem(lsKey);state=s?JSON.parse(s):{title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};}
-    catch{state={title:'My Study Checklist',urgent:[],canwait:[],weeks:[]};}
+    try{const s=localStorage.getItem(lsKey);state=s?JSON.parse(s):getDefaultState();}
+    catch{state=getDefaultState();}
     ensureIds();setSyncState('error','offline – local only');
     showToast('Cloud unreachable, using local',true);
   }
@@ -743,30 +748,19 @@ async function saveToCloud(){
   setSyncState('syncing','saving…');
   const lsKey='study_local_'+currentUser.id;
   try{
-    await authFetch(`/rest/v1/checklist?id=eq.${rowId()}`,{
-      method:'PATCH',
-      prefer:'return=minimal',
-      body:JSON.stringify({data:state,updated_at:new Date().toISOString()})
+    // Always upsert — works whether row exists or not
+    await authFetch(`/rest/v1/checklist`,{
+      method:'POST',
+      prefer:'resolution=merge-duplicates,return=minimal',
+      body:JSON.stringify({id:rowId(),data:state,updated_at:new Date().toISOString()})
     });
-    // If PATCH returned nothing (row doesn't exist yet), do upsert
     localStorage.setItem(lsKey,JSON.stringify(state));
     setSyncState('synced','saved ✓');
     setTimeout(()=>setSyncState('synced','synced'),2000);
   }catch(e){
-    // Try upsert
-    try{
-      await authFetch(`/rest/v1/checklist`,{
-        method:'POST',
-        prefer:'resolution=merge-duplicates',
-        body:JSON.stringify({id:rowId(),data:state,updated_at:new Date().toISOString()})
-      });
-      localStorage.setItem(lsKey,JSON.stringify(state));
-      setSyncState('synced','saved ✓');
-      setTimeout(()=>setSyncState('synced','synced'),2000);
-    }catch(e2){
-      localStorage.setItem(lsKey,JSON.stringify(state));
-      setSyncState('error','cloud error – saved locally');
-    }
+    localStorage.setItem(lsKey,JSON.stringify(state));
+    setSyncState('error','cloud error – saved locally');
+    console.error('saveToCloud error:',e);
   }
 }
 
@@ -1293,6 +1287,11 @@ document.addEventListener('click',()=>{
 
 // Apply saved theme immediately (even before auth)
 (()=>{const t=localStorage.getItem('study_theme');if(t==='dark')document.body.classList.add('dark');})();
+
+// SEED HISTORY (runs once, preserves existing values)
+if(!localStorage.getItem('today_2026_3_21'))localStorage.setItem('today_2026_3_21',JSON.stringify([{id:'h1',name:'conjunctiva',done:true},{id:'h2',name:'conjunctivitis',done:true},{id:'h3',name:'Cornea',done:true},{id:'h4',name:'keratitis',done:true},{id:'h5',name:'dry eye d.',done:true},{id:'h6',name:'bapelitits',done:true}]));
+if(!localStorage.getItem('timer_2026_3_21'))localStorage.setItem('timer_2026_3_21','5278');
+if(!localStorage.getItem('timer_2026_3_22'))localStorage.setItem('timer_2026_3_22','5843');
 
 // Check for saved session
 (()=>{
